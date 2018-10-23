@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <title>Quotes.com</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quotes/style2.css' %}">
+</head>
+
+<body>
+    <header>
+        <h1>Quotes.com</h1>
+        <h3> Welcome {{user.first_name}} {{user.last_name}}</h3>
+        <a href="/quotes/editUser">Edit</a>
+        <a href="/quotes/goback">Logout</a>
+    </header>
+    <div class="right-side">
+        <p class="top">Post a message</p>
+        <form class="form-signin" action="/quotes/create_message" method="post">
+            {% csrf_token %}
+            <label for="exampleInputName">Author:</label>
+            <input type="text" class="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Author" name="author">
+            <small id="emailHelp" class="form-text text-muted">Please do not use fake names.</small>
+            <input type="hidden" name="hidden" value="{{user.id}}">
+            <textarea placeholder="Quote cannot be more than 250 characters" name="quote" style="width:100%; height:75px;"></textarea>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Post</button>
+        </form>
+    </div>
+    </div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{message.tag}}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div id="container">
+        <div class="left-side">
+
+            <p id="wall" class="top">Quotes</p>
+            {% for i in quotes reversed %}
+            <p>Posted By: <a href="/quotes/showUser/{{i.user.id}}">{{i.user.first_name}} {{i.user.last_name}}</a></p>
+            <p style="font-size: 20pt; line-height: 8px;">"{{i.content}}"</p>
+            <p style="font-size: 15pt; line-height: 8px;">{{i.author}}</p>
+            <p>({{i.created_at|timesince}} ago)
+                {{i.likes.count}}
+
+                {%if user not in i.likes.all%}
+                <a href="/quotes/like_message/{{i.id}}">
+                    <img src="{% static 'quotes/images/like.png' %}" alt='heart'></a>
+                {% else %}
+                <img src="{% static 'quotes/images/liked.png' %}" alt='heart'>
+                {% endif %}
+                </br>
+                {% if user.id == i.user.id %}
+                <a href="/quotes/delete_message/{{i.id}}">Delete</a>
+            {% endif %}
+            </p>
+            {% endfor %}
+        </div>
+
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <title>Creation Center</title>
+    {% load static %}
+    <style>
+        body{
+    background-color: #3C6478;
+}
+#form1{
+    width: 40%;
+    display: inline-block;
+    margin-left: 10%;
+    margin-top: 100px;
+}
+#form2{
+    width: 40%;
+    display: inline-block;
+    margin-top: 100px;
+}
+#logo{
+    margin-left: 40%;
+}
+h1.h3{
+    text-align: center;
+    color: white;
+}
+textarea{
+    width: 100%;
+    height: 100px;
+    margin-top: 2%;
+}
+.messages{
+    list-style-type: none;
+    padding: 15px 10px;
+    border-radius: 10px;
+    background-color: rgba(255,0,0,0.5);
+    color: white;
+}
+.btn-primary{
+    margin-top:15px;
+}
+    </style>
+</head>
+
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form id="form1" class="form-signin" action="/quotes/editorUser" method="post">
+        {% csrf_token %}
+        <h1 class="h3 mb-3 font-weight-normal">Edit</h1>
+
+        <label for="inputName" class="sr-only">First Name</label>
+        <input type="text" id="inputName" class="form-control" placeholder="First Name" name="first_name" value="{{user.first_name}}">
+        <label for="inputName" class="sr-only">Last Name</label>
+        <input type="text" id="inputName" class="form-control" placeholder="Last Name" name="last_name" value="{{user.last_name}}">
+
+        <label for="inputEmail" class="sr-only">Email</label>
+        <input type="hidden" name="user_email" value="{{user.email}}">
+        <input type="text" id="inputEmail" class="form-control" placeholder="Email" name="email" value="{{user.email}}">
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Save Changes</button>
+    </form>
+    <form id="form2" class="form-signin" action="/quotes/editUserPass" method="post">
+        {% csrf_token %}
+        <h1 class="h3 mb-3 font-weight-normal">Edit Password</h1>
+        <input type="hidden" name="id" value="{{user.id}}">
+        <input type="password" class="form-control" placeholder="Old Password" name="old_password">
+        <input type="password" class="form-control" placeholder="New Password" name="new_password">
+        <input type="password" class="form-control" placeholder="Confirm Password" name="confirm_password">
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Save Changes</button>
+    </form>
+    <a class="btn btn-lg btn-primary btn-block" href="/quotes">Go back</a>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <title>Friends.com</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quotes/style2.css' %}">
+</head>
+
+<body>
+    <header>
+        <h1>Quotes.com</h1>
+        <a href="/quotes">Go back</a>
+        <a href="/quotes/goback">Logout</a>
+    </header>
+    <div id="container">
+        <div class="left-side">
+
+            <p id="wall" class="top">{{user.first_name}} {{user.last_name}} Quotes:</p>
+            {% for i in quotes reversed %}
+            <p style="font-size: 20pt; line-height: 8px;">{{i.content}}</p>
+            <p>({{i.created_at|timesince}} ago)
+                {{i.likes.count}}
+                {% if i.likes.count <= 1 %}
+                Like
+                {% else %}
+                Likes
+                {% endif %}
+                {% if logged.id == i.user.id %}
+                <a href="delete_message/{{i.id}}">Delete</a></p>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+</body>
+
+</html>
